@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "austenc.laravel-blade-spacer",
+        "arbitraer.laravel-blade-additional-snippets",
+        "hookyqr.beautify",
+        "felixfbecker.php-intellisense",
+        "esbenp.prettier-vscode"
+    ]
+}

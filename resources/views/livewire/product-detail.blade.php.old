@@ -1,0 +1,178 @@
+@section('css')
+{{-- Css Tambahan --}}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+@endsection
+<div class="container">
+
+    {{-- If your happiness depends on money, you will never be happy with yourself. --}}
+    <div class="row mb-2">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href=" {{ route('home') }} " class="text-dark">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('products') }}" class="text-dark"> Product </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page"> {{ $product->jenis }} </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <a href="{{ route('products') }}" class="btn btn-sm btn-success"><i class="fas fa-arrow-left"></i>
+                Kembali</a>
+        </div>
+    </div>
+
+    <div class="row my-xl-4">
+
+        <div class="col-md-5">
+            <div class="card gambar-product">
+                <div class="card-body">
+                    <img src="{{ url('assets/jersey') }}/{{ $product->gambar }}" width="400px" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 mt-3">
+            <h2>
+                <strong>{{ $product->nama }}</strong>
+            </h2>
+
+            <h5>
+                @if($product->is_ready == 1)
+                <span class="badge badge-success"> <i class="fas fa-check"></i> Ready Stok</span>
+                @else
+                <span class="badge badge-danger"> <i class="fas fa-times"></i> Stok Habis</span>
+                @endif
+            </h5>
+
+            <h4> Rp. {{ number_format($product->harga) }} </h4>
+
+            <div class="row">
+                <div class="col">
+                    @if(session()->has('message'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('message') }}
+                    </div>
+                    @endif
+                    <form wire:submit.prevent="masukkanKeranjang">
+                        @csrf
+                        <table class="table" style="border-top : hidden">
+                            <tr>
+                                <td> Product Kategori </td>
+                                <td>:</td>
+                                <td>
+                                    <img src="{{ url('assets/liga') }}/{{ $product->liga->gambar }}" class="img-fluid" width="50">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jenis</td>
+                                <td>:</td>
+                                <td>{{ $product->jenis }}</td>
+                            </tr>
+                            <tr>
+                                <td>Berat</td>
+                                <td>:</td>
+                                <td>{{ $product->berat }}</td>
+                            </tr>
+                            <tr>
+                                <td>Jumlah</td>
+                                <td>:</td>
+                                <td>
+                                    <input id="jumlah_pesanan" type="number" class="form-control @error('jumlah_pesanan') is-invalid @enderror" wire:model="jumlah_pesanan" value="{{ old('jumlah_pesanan') }}" required autocomplete="name" autofocus>
+
+                                    @error('jumlah_pesanan')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </td>
+                            </tr>
+                            {{-- @if($jumlah_pesanan > 1) --}}
+                            {{-- @else --}}
+                            <tr>
+                                <td colspan="3"><strong>Isi Ucapan Produk</strong> </td>
+                            </tr>
+                            <tr>
+                                <td>Nama Ucapan</td>
+                                <td>:</td>
+                                <td>
+                                    <input id="nama_ucapan" type="text" class="form-control @error('nama_ucapan') is-invalid @enderror" wire:model="nama_ucapan" value="{{ old('nama_ucapan') }}" required autocomplete="name" autofocus>
+
+                                    @error('nama_ucapan')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nomor Pemesan</td>
+                                <td>:</td>
+                                <td>
+                                    <input id="nomor_pemesan" type="number" class="form-control @error('nomor_pemesan') is-invalid @enderror" wire:model="nomor_pemesan" value="{{ old('nomor_pemesan') }}" required autocomplete="name" autofocus>
+
+                                    @error('nomor_pemesan')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Tanggal Kirim</td>
+                                <td>:</td>
+                                <td>
+                                    <input id="tanggal_kirim" type="date" class="form-control datepicker-here @error('tanggal_kirim') is-invalid @enderror" wire:model="tanggal_kirim" data-position="top left" value="{{ old('tanggal_kirim') }}" required autocomplete="name" autofocus>
+
+                                    @error('tanggal_kirim')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </td>
+                            </tr>
+                            {{-- @endif --}}
+                            {{-- <tr>
+                            <td>
+                                <button type="button" name="" id="" class="btn btn-success btn-block" btn-lg btn-block">
+                                    <i class="fab fa-whatsapp fa-lg" aria-hidden="true"></i> Pesan
+                                    via WA</button>
+                            </td>
+
+                            <td>
+                                <button type="submit" class="btn btn-outline-success btn-block rounded-lg"
+                                    @if($product->is_ready
+                                    !==
+                                    1)
+                                    disabled @endif><i class="fas fa-shopping-cart"></i>
+                                    Add To Cart</button>
+                            </td>
+
+                        </tr> --}}
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <a href="https://semawur.com/ORDZrw" style="text-decoration: none"><button type="button" name="" id="" class="btn btn-success btn-block" btn-lg btn-block">
+                                        <i class="fab fa-whatsapp fa-lg" aria-hidden="true"></i> Pesan
+                                        via WhatsApp</button></a>
+
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-outline-success btn-block rounded-lg" @if($product->is_ready
+                                    !==
+                                    1)
+                                    disabled @endif><i class="fas fa-shopping-cart"></i>
+                                    Maskukkan Keranjang</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
